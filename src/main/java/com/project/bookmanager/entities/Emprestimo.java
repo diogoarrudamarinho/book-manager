@@ -6,8 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tb_emprestimo")
@@ -18,10 +20,13 @@ public class Emprestimo {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "livro_id", nullable = false)
     private Livro livro;
 
+    @NotBlank(message = "Nome da pessoa obrigatório")
     private String nomePessoa;
-    private LocalDate dataEmpresitmo;
+
+    private LocalDate dataEmprestimo;
     private LocalDate dataDevolucao;
 
     public Emprestimo() {
@@ -31,7 +36,7 @@ public class Emprestimo {
         this.id = id;
         this.livro = livro;
         this.nomePessoa = nomePessoa;
-        this.dataEmpresitmo = LocalDate.now();
+        this.dataEmprestimo = LocalDate.now();
         this.dataDevolucao = null;
     }
 
@@ -51,12 +56,12 @@ public class Emprestimo {
         this.nomePessoa = nomePessoa;
     }
 
-    public LocalDate getDataEmpresitmo() {
-        return dataEmpresitmo;
+    public LocalDate getDataEmprestimo() {
+        return dataEmprestimo;
     }
 
-    public void setDataEmpresitmo(LocalDate dataEmpresitmo) {
-        this.dataEmpresitmo = dataEmpresitmo;
+    public void setDataEmprestimo(LocalDate dataEmprestimo) {
+        this.dataEmprestimo = dataEmprestimo;
     }
 
     public LocalDate getDataDevolucao() {
