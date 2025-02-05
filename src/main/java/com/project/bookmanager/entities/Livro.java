@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tb_livro")
@@ -19,24 +20,42 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    @NotBlank(message = "Titulo obrigatório")
+    private String titulo;
+
     private String autor;
     private String genero;
+
+    @NotBlank(message = "Campo obrigatório")
     private Boolean lido;
+
+    @NotBlank(message = "Campo obrigatório")
     private Boolean emprestado;
+
+    private String imageURL;
 
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
     private List<Emprestimo> emprestimos;
 
     public Livro(){}
 
-    public Livro(String autor, Boolean emprestado, String genero, Long id, Boolean lido, String nome) {
+    public Livro(String autor, Boolean emprestado, String genero, Long id, Boolean lido, String titulo, String imageURL) {
         this.autor = autor;
         this.emprestado = emprestado;
         this.genero = genero;
         this.id = id;
         this.lido = lido;
-        this.nome = nome;
+        this.titulo = titulo;
+        this.imageURL = imageURL;
+    }
+
+    public Livro(Long id, String titulo, String autor, String genero, Boolean lido, Boolean emprestado) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.genero = genero;
+        this.lido = lido;
+        this.emprestado = emprestado;
     }
 
     public Long getId() {
@@ -47,12 +66,12 @@ public class Livro {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getAutor() {
@@ -71,7 +90,7 @@ public class Livro {
         this.genero = genero;
     }
 
-    public Boolean getLido() {
+    public Boolean isLido() {
         return lido;
     }
 
@@ -79,7 +98,7 @@ public class Livro {
         this.lido = lido;
     }
 
-    public Boolean getEmprestado() {
+    public Boolean isEmprestado() {
         return emprestado;
     }
 
@@ -93,6 +112,14 @@ public class Livro {
 
     public void setEmprestimos(List<Emprestimo> emprestimos) {
         this.emprestimos = emprestimos;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     @Override
