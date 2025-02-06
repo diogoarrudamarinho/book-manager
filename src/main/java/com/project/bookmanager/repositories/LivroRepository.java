@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.project.bookmanager.entities.Genero;
 import com.project.bookmanager.entities.Livro;
 
 @Repository
@@ -17,7 +18,7 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
             "OR LOWER(l.autor) LIKE %:term% ")
     List<Livro> findAllByTerm(@Param("term")String term);
     
-    List<Livro> findAllByGenero(String genero);
+    List<Livro> findByGeneroInIgnoreCase(List<Genero> generos);
 
     @Query( "SELECT l FROM Livro l" + 
             "WHERE l.read = true")
