@@ -26,6 +26,7 @@ public class EmprestimoImp implements EmprestimoService {
     private LivroRepository livroRepository;
 
     @Override
+    @Transactional
     public void create(EmprestimoRequestDTO entity) {
         Emprestimo emprestimo = new Emprestimo();
 
@@ -88,6 +89,7 @@ public class EmprestimoImp implements EmprestimoService {
     }
 
     @Override
+    @Transactional
     public EmprestimoDTO update(Long id, EmprestimoRequestDTO entity) {
         if(id == null)
             throw new IllegalArgumentException("Object ID is null");
@@ -109,6 +111,7 @@ public class EmprestimoImp implements EmprestimoService {
     }
 
     @Override
+    @Transactional
     public void devolver(Long id) {
         Emprestimo emprestimo = repository.findById(id)
                                           .orElseThrow(() -> 
@@ -124,6 +127,7 @@ public class EmprestimoImp implements EmprestimoService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if(id == null)
             throw new IllegalArgumentException("Object ID is null");
