@@ -1,5 +1,6 @@
 package com.project.bookmanager.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,9 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_livro")
@@ -20,29 +25,35 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Titulo obrigatório")
+    @NotBlank(message = "Título obrigatório")
     private String titulo;
 
     private String autor;
-    private String genero;
 
-    @NotBlank(message = "Campo obrigatório")
+    @NotNull(message = "Campo 'lido' obrigatório")
     private Boolean lido;
 
-    @NotBlank(message = "Campo obrigatório")
+    @NotNull(message = "Campo 'emprestado' obrigatório")
     private Boolean emprestado;
 
     private String imageURL;
 
+    @ManyToMany
+    @JoinTable(
+        name = "livro_genero",
+        joinColumns = @JoinColumn(name = "livro_id"),
+        inverseJoinColumns = @JoinColumn(name = "genero_id")
+    )
+    private List<Genero> generos = new ArrayList<>();
+
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
-    private List<Emprestimo> emprestimos;
+    private List<Emprestimo> emprestimos = new ArrayList<>();
 
     public Livro(){}
 
     public Livro(String autor, Boolean emprestado, String genero, Long id, Boolean lido, String titulo, String imageURL) {
         this.autor = autor;
         this.emprestado = emprestado;
-        this.genero = genero;
         this.id = id;
         this.lido = lido;
         this.titulo = titulo;
@@ -53,7 +64,6 @@ public class Livro {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
-        this.genero = genero;
         this.lido = lido;
         this.emprestado = emprestado;
     }
@@ -82,12 +92,12 @@ public class Livro {
         this.autor = autor;
     }
 
-    public String getGenero() {
-        return genero;
+    public List<Genero> getGeneros() {
+        return generos;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos;
     }
 
     public Boolean isLido() {
