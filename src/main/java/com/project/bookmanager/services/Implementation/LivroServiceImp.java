@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.bookmanager.dto.LivroDTO;
+import com.project.bookmanager.dto.LivroRequestDTO;
+import com.project.bookmanager.entities.Genero;
 import com.project.bookmanager.entities.Livro;
+import com.project.bookmanager.repositories.GeneroRepository;
 import com.project.bookmanager.repositories.LivroRepository;
 import com.project.bookmanager.services.LivroService;
 
@@ -19,15 +22,30 @@ public class LivroServiceImp implements LivroService{
     @Autowired
     private LivroRepository repository;
 
-    @Override
-    public void create(Livro entity) {
-        if(entity.getId() != null && repository.existsById(entity.getId()))
-            throw new IllegalArgumentException("ID already exists");
+    @Autowired
+    private GeneroRepository generoRepository;
 
-        repository.save(entity);
+    @Override
+    @Transactional
+    public void create(LivroRequestDTO entity) {
+
+        List<Genero> generos = generoRepository.findAllById(entity.getGenerosIds());
+        
+        if (generos.size() != entity.getGenerosIds().size())
+            throw new IllegalArgumentException("Genero not found");
+
+        Livro livro = new Livro();
+        livro.setTitulo(entity.getTitulo());
+        livro.setAutor(entity.getAutor());
+        livro.setGeneros(generos);
+        livro.setLido(entity.isLido());
+        livro.setImageURL(entity.getImageURL());
+
+        repository.save(livro);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LivroDTO> findAll() {
         List<Livro> livros = repository.findAll();
 
@@ -91,15 +109,17 @@ public class LivroServiceImp implements LivroService{
     }
 
     @Override
-    public List<LivroDTO> findByGenero(String genero) {
-        if(genero == null || genero.isBlank())
-            throw new IllegalArgumentException("Genero is null");
-
-        List<Livro> livros = repository.findAllByGenero(genero.toLowerCase());
+    @Transactional(readOnly = true)
+    public List<LivroDTO> findByGeneros(List<String> generos) {
+        if (generos == null || generos.isEmpty()) 
+            throw new IllegalArgumentException("List is null or empty");
+        
+        List<Genero> generosList = generoRepository.findByNomeInIgnoreCase(generos);
+        List<Livro> livros = repository.findByGeneroInIgnoreCase(generosList);
 
         return livros.stream()
-                      .map(LivroDTO::new)
-                      .collect(Collectors.toList());
+                     .map(LivroDTO::new)
+                     .collect(Collectors.toList());
     }
 
     @Override
@@ -116,9 +136,15 @@ public class LivroServiceImp implements LivroService{
     }
 
     @Override
-    public LivroDTO update(Livro entity, Long id) {
+    @Transactional
+    public LivroDTO update(LivroRequestDTO entity, Long id) {
         if(id == null)
             throw new IllegalArgumentException("Object ID is null");
+
+        List<Genero> generos = generoRepository.findAllById(entity.getGenerosIds());
+        
+        if (generos.size() != entity.getGenerosIds().size())
+            throw new IllegalArgumentException("Genero not found");
 
         Livro livro = repository.findById(id)
                                 .orElseThrow(() -> 
@@ -127,7 +153,7 @@ public class LivroServiceImp implements LivroService{
 
         livro.setTitulo(entity.getTitulo());
         livro.setAutor(entity.getAutor());
-        livro.setGenero(entity.getGenero());
+        livro.setGeneros(generos);
         livro.setLido(entity.isLido());
         livro.setImageURL(entity.getImageURL());
 
@@ -137,6 +163,7 @@ public class LivroServiceImp implements LivroService{
     }
 
     @Override
+    @Transactional
     public void updateReadStatus(Long id) {
         if(id == null)
             throw new IllegalArgumentException("Object ID is null");
@@ -151,6 +178,7 @@ public class LivroServiceImp implements LivroService{
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if(id == null)
             throw new IllegalArgumentException("Object ID is null");

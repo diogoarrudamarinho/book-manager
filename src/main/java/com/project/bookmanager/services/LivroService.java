@@ -3,11 +3,11 @@ package com.project.bookmanager.services;
 import java.util.List;
 
 import com.project.bookmanager.dto.LivroDTO;
-import com.project.bookmanager.entities.Livro;
+import com.project.bookmanager.dto.LivroRequestDTO;
 
 public interface LivroService {
 
-    void create(Livro entity);
+    void create(LivroRequestDTO entity);
     List<LivroDTO> findAll();
     List<LivroDTO> findAllRead();
     List<LivroDTO> findAllNotRead();
@@ -15,8 +15,8 @@ public interface LivroService {
     List<LivroDTO> findAllNotEmprestados();
     LivroDTO findById(Long id);
     List<LivroDTO> findByTerm(String term);
-    List<LivroDTO> findByGenero(String genero);
-    LivroDTO update(Livro entity, Long id);
+    List<LivroDTO> findByGeneros(List<String> generos);
+    LivroDTO update(LivroRequestDTO entity, Long id);
     void updateReadStatus(Long id);
     void delete(Long id);
 }
