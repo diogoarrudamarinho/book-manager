@@ -29,9 +29,14 @@ public class LivroServiceImp implements LivroService{
     @Transactional
     public void create(LivroRequestDTO entity) {
 
-        List<Genero> generos = generoRepository.findAllById(entity.getGenerosIds());
+        List<String> generosLower = entity.getGeneros()
+                                          .stream()
+                                          .map(String::toLowerCase)
+                                          .collect(Collectors.toList());
+
+        List<Genero> generos = generoRepository.findAllByNomes(generosLower);
         
-        if (generos.size() != entity.getGenerosIds().size())
+        if (generos.size() != entity.getGeneros().size())
             throw new IllegalArgumentException("Genero not found");
 
         Livro livro = new Livro();
@@ -114,8 +119,7 @@ public class LivroServiceImp implements LivroService{
         if (generos == null || generos.isEmpty()) 
             throw new IllegalArgumentException("List is null or empty");
         
-        List<Genero> generosList = generoRepository.findByNomeInIgnoreCase(generos);
-        List<Livro> livros = repository.findByGeneroInIgnoreCase(generosList);
+        List<Livro> livros = repository.findAllByGeneros(generos);
 
         return livros.stream()
                      .map(LivroDTO::new)
@@ -141,9 +145,14 @@ public class LivroServiceImp implements LivroService{
         if(id == null)
             throw new IllegalArgumentException("Object ID is null");
 
-        List<Genero> generos = generoRepository.findAllById(entity.getGenerosIds());
+        List<String> generosLower = entity.getGeneros()
+                                          .stream()
+                                          .map(String::toLowerCase)
+                                          .collect(Collectors.toList());
+
+        List<Genero> generos = generoRepository.findAllByNomes(generosLower);
         
-        if (generos.size() != entity.getGenerosIds().size())
+        if (generos.size() != entity.getGeneros().size())
             throw new IllegalArgumentException("Genero not found");
 
         Livro livro = repository.findById(id)
