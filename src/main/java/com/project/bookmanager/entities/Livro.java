@@ -51,7 +51,7 @@ public class Livro {
 
     public Livro(){}
 
-    public Livro(String autor, Boolean emprestado, String genero, Long id, Boolean lido, String titulo, String imageURL) {
+    public Livro(String autor, Boolean emprestado, Long id, Boolean lido, String titulo, String imageURL) {
         this.autor = autor;
         this.emprestado = emprestado;
         this.id = id;
@@ -60,7 +60,7 @@ public class Livro {
         this.imageURL = imageURL;
     }
 
-    public Livro(Long id, String titulo, String autor, String genero, Boolean lido, Boolean emprestado) {
+    public Livro(Long id, String titulo, String autor, Boolean lido, Boolean emprestado) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
