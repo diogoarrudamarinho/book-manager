@@ -1,14 +1,10 @@
 package com.project.bookmanager.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.project.bookmanager.entities.Genero;
-import com.project.bookmanager.entities.Livro;
-
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public class LivroRequestDTO {
     
@@ -25,22 +21,19 @@ public class LivroRequestDTO {
 
     private String imageURL;
 
-    @NotEmpty(message = "Selecione pelo menos um gênero")
-    private List<@Positive(message = "Id Inválido") Long> generosIds; 
+    @NotBlank(message = "Campo 'generos' obrigatório")
+    private List<String> generos = new ArrayList<>();
 
     public LivroRequestDTO() {
     }
 
-    public LivroRequestDTO(Livro entity) {
-        this.titulo = entity.getTitulo();
-        this.autor = entity.getAutor();
-        this.lido = entity.isLido();
-        this.emprestado = entity.isEmprestado();
-        this.imageURL = entity.getImageURL();
-        this.generosIds = entity.getGeneros()
-                            .stream()
-                            .map(Genero::getId)
-                            .toList();
+    public LivroRequestDTO(String titulo, String autor, Boolean lido, Boolean emprestado, String imageURL, List<String> generos) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.lido = lido;
+        this.emprestado = emprestado;
+        this.imageURL = imageURL;
+        this.generos = generos;
     }
 
     public String getTitulo() {
@@ -63,8 +56,8 @@ public class LivroRequestDTO {
         return imageURL;
     }
 
-    public List<Long> getGenerosIds() {
-        return generosIds;
+    public List<String> getGeneros() {
+        return generos;
     }
 
     
