@@ -34,7 +34,7 @@ public class LivroController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<LivroDTO>> findAll() {
         return ResponseEntity.ok(livroService.findAll());
     }
