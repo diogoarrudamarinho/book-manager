@@ -45,6 +45,7 @@ public class LivroServiceImp implements LivroService{
         livro.setGeneros(generos);
         livro.setLido(entity.isLido());
         livro.setImageURL(entity.getImageURL());
+        livro.setEmprestado(entity.isEmprestado());
 
         repository.save(livro);
     }
