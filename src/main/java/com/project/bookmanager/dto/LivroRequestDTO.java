@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class LivroRequestDTO {
@@ -21,8 +22,8 @@ public class LivroRequestDTO {
 
     private String imageURL;
 
-    @NotBlank(message = "Campo 'generos' obrigatório")
-    private List<String> generos = new ArrayList<>();
+    @NotEmpty(message = "Campo 'generos' obrigatório")
+    private List<@NotBlank String> generos = new ArrayList<>();
 
     public LivroRequestDTO() {
     }
