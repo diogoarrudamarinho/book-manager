@@ -10,7 +10,7 @@ import com.project.bookmanager.entities.Genero;
 
 public interface GeneroRepository extends JpaRepository<Genero, Long> {
 
-    @Query( "SELECT g FROM tb_genero g "+ 
+    @Query( "SELECT g FROM Genero g "+ 
             "WHERE LOWER(g.nome) IN :generos")
     List<Genero> findAllByNomes(@Param("generos") List<String> generos);
     
