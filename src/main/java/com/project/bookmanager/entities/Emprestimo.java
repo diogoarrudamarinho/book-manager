@@ -30,6 +30,7 @@ public class Emprestimo {
     private LocalDate dataDevolucao;
 
     public Emprestimo() {
+        this.dataEmprestimo = LocalDate.now();
     }
 
     public Emprestimo(Long id, String nomePessoa, Livro livro) {
