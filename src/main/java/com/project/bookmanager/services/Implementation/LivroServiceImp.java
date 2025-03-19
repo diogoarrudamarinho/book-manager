@@ -119,8 +119,10 @@ public class LivroServiceImp implements LivroService{
     public List<LivroDTO> findByGeneros(List<String> generos) {
         if (generos == null || generos.isEmpty()) 
             throw new IllegalArgumentException("List is null or empty");
-        
-        List<Livro> livros = repository.findAllByGeneros(generos);
+
+        List<Livro> livros = repository.findAllByGeneros(generos.stream()
+                                                                .map(String::toLowerCase)
+                                                                .collect(Collectors.toList()));
 
         return livros.stream()
                      .map(LivroDTO::new)

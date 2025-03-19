@@ -71,7 +71,7 @@ public class EmprestimoImp implements EmprestimoService {
     @Override
     @Transactional(readOnly = true)
     public List<EmprestimoDTO> findAllByNomePessoa(String nomePessoa) {
-        List<Emprestimo> emprestimos = repository.findAllByNomePessoa(nomePessoa);
+        List<Emprestimo> emprestimos = repository.findAllByNomePessoa(nomePessoa.toLowerCase());
 
         return emprestimos.stream()
                           .map(EmprestimoDTO::new)
